@@ -1,15 +1,13 @@
 import Fastify from 'fastify'
-import items from './Items.js'
+import routes from "./src/routes/items.js";
+
 const fastify = Fastify({
     logger: true
 })
 
+fastify.register(routes)
+
 const PORT = 8080
-
-
-fastify.get('/items', (request, reply) => {
-    reply.send(items)
-})
 
 // Run the server!
 // Host defaults to listening only on the localhost 127.0.0.1
