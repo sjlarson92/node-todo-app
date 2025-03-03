@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import {FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import items from "../../Items.js";
 
 // Item schema
@@ -43,10 +43,16 @@ const ItemArrayType = {
     }
 }
 
+interface RequestBody {
+    id: string;
+    name: string;
+    completed: boolean;
+}
+
 async function routes (fastify: FastifyInstance) {
     fastify.get('/', getHome)
 
-    fastify.get('/items', ItemArrayType, async (request: FastifyRequest, reply: FastifyReply) => {
+    fastify.get('/items', ItemArrayType, async (_, reply) => {
         reply.send(items)
     })
 
@@ -54,6 +60,18 @@ async function routes (fastify: FastifyInstance) {
         const {id} = request.params
         const item = items.find(item => item.id === id)
         reply.send(item)
+    })
+
+    fastify.post<{ Body: RequestBody }>('/items', async (request, reply) => {
+        items.push(request.body)
+        reply.send(items)
+    })
+
+    fastify.delete('/items/:id', async (request: FastifyRequest<{ Params: { id: string } }>, reply) => {
+        const {id} = request.params
+        const updatedItems = items.filter((item) => item.id !== id)
+
+        reply.send(updatedItems)
     })
 }
 

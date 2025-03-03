@@ -5,7 +5,7 @@ const server = fastify()
 
 server.register(routes)
 
-server.get('/ping', async (_, _) => {
+server.get('/ping', async (request, reply) => {
     return 'pong\n'
 })
 
