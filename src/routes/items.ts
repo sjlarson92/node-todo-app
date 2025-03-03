@@ -1,3 +1,4 @@
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import items from "../../Items.js";
 
 // Item schema
@@ -6,6 +7,19 @@ const Item = {
     properties: {
         id: {type: 'string'},
         name: {type: 'string'}
+    }
+}
+
+const getHome = {
+    schema: {
+        response: {
+            200: {
+                type: 'string'
+            }
+        }
+    },
+    handler: async () => {
+        return { hello: 'world' }
     }
 }
 
@@ -28,16 +42,15 @@ const ItemArrayType = {
         }
     }
 }
-async function routes (fastify, options) {
-    fastify.get('/', async () => {
-        return { hello: 'world' }
-    })
 
-    fastify.get('/items', ItemArrayType, (request, reply) => {
+async function routes (fastify: FastifyInstance) {
+    fastify.get('/', getHome)
+
+    fastify.get('/items', ItemArrayType, async (request: FastifyRequest, reply: FastifyReply) => {
         reply.send(items)
     })
 
-    fastify.get('/items/:id', ItemType, (request, reply) => {
+    fastify.get('/items/:id', ItemType, async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
         const {id} = request.params
         const item = items.find(item => item.id === id)
         reply.send(item)

@@ -1,10 +1,12 @@
 {
   "name": "todo-app",
   "version": "1.0.0",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "build": "tsc -p tsconfig.json"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +18,8 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
-  },
-  "type": "module"
+    "@tsconfig/node22": "^22.0.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2"
+  }
 }
